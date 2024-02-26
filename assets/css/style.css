@@ -6,7 +6,7 @@
 
 body {
     font-family: Arial, sans-serif;
-    background-color: #e0e1dd;
+    background-color: #DEDEDE;
     }
 
 header {
@@ -54,12 +54,18 @@ aside .search-section button:hover {
     color: #1b263b;
     }
 
-.recent-section {
-    background-color: #e0e1dd;
+.recent-section h2 {
+
+    font-size: 25px;
+    margin-bottom: 10px;
+    color: #1b263b;
+}    
+.recent-section div {
+    background-color: #778da9;
     padding: 10px;
     margin-bottom: 10px;
-    }
-
+    border: solid 1px #1b263b;
+}
 
 section {
     flex: 0 0 65%;
