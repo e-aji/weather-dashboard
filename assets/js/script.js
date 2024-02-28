@@ -3,29 +3,50 @@ const apiKey = "105998a52b86441612d8bdd2a88fbd96";
 var locationEl = document.querySelector("#location");
 var searchEl = document.querySelector("#search");
 var forecastDaysDivEl = document.querySelector("#forecast-days");
-var forecastDayDivEl = document.querySelector("#forecast-day");
+var forecastDayDivEl = document.querySelector(".forecast-day");
 
-function saveSearchedLocation(location) {
+var recentLocationsEl = document.querySelector("#recent-locations");
 
-    const location = JSON.parse(localStorage.getItem("location")) || [];
-    location.push(location);
-    localStorage.setItem("location", JSON.stringify(locations));
+function saveSearchedLocation(locationName) {
+
+    const recentLocations = JSON.parse(localStorage.getItem("location")) || [];
+    recentLocations.push(locationName);
+    localStorage.setItem("location", JSON.stringify(recentLocations));
 }
 
 function loadSearchedLocations() {
     
-    const location = JSON.parse(localStorage.getItem("location")) || [];
+    const recentLocations = JSON.parse(localStorage.getItem("location")) || [];
 
-    location.forEach((location) => {
-      getCurrentWeather(location);
+    recentLocationsEl.innerHTML = "";
+    recentLocations.forEach((item) => {
+
+      var newLocation = document.createElement("button");
+      newLocation.textContent = item;
+      newLocation.classList.add("btn");
+      newLocation.onclick = onClickRecentLocation;
+
+      recentLocationsEl.appendChild(newLocation);
     });
+}
+
+function onClickRecentLocation(event) {
+
+  lookupLocation(event.target.textContent);
+
 }
 
 function onClickSearch() {
 
-    const locationName = locationEl.value.trim();
+  const locationName = locationEl.value.trim();
 
   if (!locationName) return;
+  lookupLocation(locationName);
+
+  saveSearchedLocation(locationName);
+}
+
+function lookupLocation(locationName) {
 
   const apiURL = `https://api.openweathermap.org/geo/1.0/direct?q=${locationName}&limit=1&appid=${apiKey}`;
 
@@ -36,16 +57,16 @@ function onClickSearch() {
         return alert(`There are no coordinates for ${locationName}`);
       const { name, lat, lon } = data[0];
       getCurrentWeather(name, lat, lon);
-      saveSearchedLocation(locationName);
+   
     })
     .catch((error) => {
       console.log("There has been an error!");
     });
-}
+  }
 
 function getCurrentWeather(locationName, lat, lon) {
   const apiURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
-
+  
   fetch(apiURL)
     .then((response) => response.json())
     .then((data) => {
@@ -62,30 +83,30 @@ function getCurrentWeather(locationName, lat, lon) {
       locationEl.value = "";
       forecastDaysDivEl.innerHTML = "";
       forecastDayDivEl.innerHTML = "";
-
+      
       fiveDayForecast.forEach((weatherData, index) => {
-        if (index === 0) {
-          forecastDaysDivEl.insertAdjacentHTML(
-            "beforeend",
-            displayWeatherForecast(locationName, weatherData, index)
-          );
-        } else {
-          forecastDayDivEl.insertAdjacentHTML(
-            "beforeend",
-            displayWeatherForecast(locationName, weatherData, index)
-          );
-        }
-      });
+      if (index === 0) {
+        forecastDaysDivEl.insertAdjacentHTML(
+          "beforeend",
+          displayWeatherForecast(locationName, weatherData, index)
+        );
+      } else {
+        forecastDayDivEl.insertAdjacentHTML(
+          "beforeend",
+          displayWeatherForecast(locationName, weatherData, index)
+        );
+      }
+    });
     })
     .catch((error) => {
       console.log("There has been an error!");
     });
 }
 
-function displayWeatherForecast(location, weatherData, index) {
+function displayWeatherForecast(locationName, weatherData, index) {
   if (index === 0) {
     return `<div id="weather">
-    <div class="weather-location" id="location-name"> ${location} (${weatherData.dt_txt.split(
+    <div class="weather-location" id="location-name"> ${locationName} (${weatherData.dt_txt.split(
       " "
     )[0]}) </div>
     <div class="weather-icon">
