@@ -38,7 +38,14 @@ THEN I am again presented with current and future conditions for that city
 
 ## Images 
 
+Weather Dashboard - Unpopulated 
+
+<img width="1440" alt="Weather Dashboard - Unpopulated" src="https://github.com/e-aji/week-6-weather-dashboard/assets/156595423/5c79704f-c57f-49fd-88bb-bf50825022f1">
+
+Weather Dashboard - Populated 
+
+
 
 ## Links 
 
-Link to deployed application 
+Link to deployed application - 
