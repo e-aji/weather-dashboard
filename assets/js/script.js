@@ -41,9 +41,9 @@ function getCurrentWeather (locationName, lat, lon){
 
   fetch(apiURL)
   .then((response) => response.json()) .then((data) => {
-    if (!data)
+    if (data.cod !== 200)
       return alert(`There are no coordinates for ${locationName}`);
-    const {main, wind } = data[0];
+    const {main, wind} = data;
     displayCurrentWeather({temp: main.temp, wind_speed: wind.speed, humidity: main.humidity});
 
   });

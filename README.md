@@ -3,6 +3,7 @@
 
 ## Description 
 
+This project was aimed to create a weather dashboard that will show the current weather and 5 day weather for a location when that location has been inputted in the input section. 
 
 
 ## User Story
@@ -30,7 +31,14 @@ THEN I am again presented with current and future conditions for that city
 
 ## Usage 
 
+* The dashboard consists of a search bar, a main dashboard and a 5 day weather card section as well as a recent locations section
+* When the user inputs a location and clicks on the search button, the current weather and subsequent 5 day weather for that location is populated on the page 
+* The location is then saved to local storage and when the user refreshes the page, the location they have previously searched will be populated in the 'recent location' section 
+* There is also a 'clear search' button where the recent location section is cleared up when the 'clear search' button is selected 
+
 ## Images 
 
 
 ## Links 
+
+Link to deployed application 
