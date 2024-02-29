@@ -41,7 +41,7 @@ function getCurrentWeather (locationName, lat, lon){
 
   fetch(apiURL)
   .then((response) => response.json()) .then((data) => {
-    if (!data.length)
+    if (!data)
       return alert(`There are no coordinates for ${locationName}`);
     const {main, wind } = data[0];
     displayCurrentWeather({temp: main.temp, wind_speed: wind.speed, humidity: main.humidity});
@@ -49,7 +49,7 @@ function getCurrentWeather (locationName, lat, lon){
   });
 }
 
-function displayCurrentWeather () {
+function displayCurrentWeather (weatherData) {
 
   const currentWeather = weatherData.current;
 
