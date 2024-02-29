@@ -1,152 +1,118 @@
 const apiKey = "105998a52b86441612d8bdd2a88fbd96";
 
-var locationEl = document.querySelector("#location");
+var locationNameEl = document.querySelector("#location-name");
 var searchEl = document.querySelector("#search");
-var forecastDaysDivEl = document.querySelector("#forecast-days");
-var forecastDayDivEl = document.querySelector(".forecast-day");
+var forecastDaysEl = document.querySelector("#forecast-days");
+var forecastDayEl = document.querySelector(".forecast-day"); 
+var weatherEl = document.querySelector("#weather"); 
+var clearSearchEl = document.querySelector("#clear-search");
 
-var recentLocationsEl = document.querySelector("#recent-locations");
+var recentLocationsDivEl = document.querySelector("#recent-locations"); 
 
-function saveSearchedLocation(locationName) {
+const MAX_DAILY_FORECAST_DAYS = 5;
 
-    const recentLocations = JSON.parse(localStorage.getItem("location")) || [];
-    recentLocations.push(locationName);
-    localStorage.setItem("location", JSON.stringify(recentLocations));
+function onClickSearch(event){
+  
+  event.preventDefault();
+
+  var locationName = locationNameEl.value.trim();
+  if (locationName) {
+
+      getCurrentWeather (locationName);
+  } else {
+      alert ("Please enter a location");
+  }
+
+  saveLocation(locationName);
+  getCurrentWeather(locationName); 
+};
+
+function saveLocation (locationName){
+
+  const recentLocations = JSON.parse(localStorage.getItem("location-name")) || [];
+  recentLocations.push(locationName);
+  localStorage.setItem("location-name", JSON.stringify(recentLocations));
+
+};
+
+function getCurrentWeather (locationName, lat, lon){
+  
+  const apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${locationName}&lat=${lat}&lon=${lon}&appid=${apiKey}`;
+
+  fetch(apiURL)
+  .then((response) => response.json()) .then((data) => {
+    if (!data.length)
+      return alert(`There are no coordinates for ${locationName}`);
+    const {main, wind } = data[0];
+    displayCurrentWeather({temp: main.temp, wind_speed: wind.speed, humidity: main.humidity});
+
+  });
+}
+
+function displayCurrentWeather () {
+
+  const currentWeather = weatherData.current;
+
+  weatherEl.textContent = "";
+
+  document.getElementById('temp_value').textContent = `${weatherData.temp} °C`;
+  document.getElementById('wind_value').textContent = `${weatherData.wind_speed} MPH`;
+  document.getElementById('humidity_value').textContent = `${weatherData.humidity} %`;
+
+}
+
+function display5DayForecast (weatherData) {
+
+  for (let i = 0; i < MAX_DAILY_FORECAST_DAYS; i++) {
+      const dailyForecast = dailyData[i];
+      console.log(dailyForecast);
+
+
+      const listItem = document.createElement('li');
+      listItem.classList.add('forecast-value');
+      listItem.innerHTML = `
+
+        <h3>${dailyForecast.day}</h3>
+        <img src="${dailyForecast.weatherIcon}" alt="Weather icon">
+        <h4>Temp: ${dailyForecast.temperature}°C</h4>
+        <h4>Wind: ${dailyForecast.wind} MPH</h4>
+        <h4>Humidity: ${dailyForecast.humidity}%</h4>
+
+      `
+      forecastDayEl.appendChild(listItem);
+      
+  }
 }
 
 function loadSearchedLocations() {
-    
-    const recentLocations = JSON.parse(localStorage.getItem("location")) || [];
+  const recentLocations = JSON.parse(localStorage.getItem("location-name")) || [];
+  const recentLocationsDivEl = document.querySelector("#recent-locations");
+  recentLocationsDivEl.innerHTML = ""; 
 
-    recentLocationsEl.innerHTML = "";
-    recentLocations.forEach((item) => {
+  recentLocations.forEach((item) => {
+    var newLocation = document.createElement("button");
+    newLocation.textContent = item;
+    newLocation.classList.add("btn");
+    newLocation.onclick = onClickRecentLocation;
 
-      var newLocation = document.createElement("button");
-      newLocation.textContent = item;
-      newLocation.classList.add("btn");
-      newLocation.onclick = onClickRecentLocation;
-
-      recentLocationsEl.appendChild(newLocation);
-    });
+    recentLocationsDivEl.appendChild(newLocation);
+  });
 }
 
-function onClickRecentLocation(event) {
+function clearSearchList () {
 
-  lookupLocation(event.target.textContent);
-
+  localStorage.removeItem("location-name");
+  const recentLocationsDivEl = document.querySelector("#recent-locations"); 
+  recentLocationsDivEl.innerHTML = ""; 
 }
 
-function onClickSearch() {
-
-  const locationName = locationEl.value.trim();
-
-  if (!locationName) return;
-  lookupLocation(locationName);
-
-  saveSearchedLocation(locationName);
+function onClickRecentLocation (event) {
+  var locationName = event.target.textContent;
+  getCurrentWeather (locationName);
 }
 
-function lookupLocation(locationName) {
+loadSearchedLocations ();
 
-  const apiURL = `https://api.openweathermap.org/geo/1.0/direct?q=${locationName}&limit=1&appid=${apiKey}`;
+searchEl.addEventListener("click", onClickSearch)
 
-  fetch(apiURL)
-    .then((response) => response.json())
-    .then((data) => {
-      if (!data.length)
-        return alert(`There are no coordinates for ${locationName}`);
-      const { name, lat, lon } = data[0];
-      getCurrentWeather(name, lat, lon);
-   
-    })
-    .catch((error) => {
-      console.log("There has been an error!");
-    });
-  }
-
-function getCurrentWeather(locationName, lat, lon) {
-  const apiURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}`;
-  
-  fetch(apiURL)
-    .then((response) => response.json())
-    .then((data) => {
-      var dailyForecastDays = [];
-
-      // Set to give one forecast per day
-      var fiveDayForecast = data.list.filter((forecast) => {
-        var forecastDays = new Date(forecast.dt_txt).getDay();
-        if (!dailyForecastDays.includes(forecastDays)) {
-          return dailyForecastDays.push(forecastDays);
-        }
-      });
-
-      locationEl.value = "";
-      forecastDaysDivEl.innerHTML = "";
-      forecastDayDivEl.innerHTML = "";
-      
-      fiveDayForecast.forEach((weatherData, index) => {
-      if (index === 0) {
-        forecastDaysDivEl.insertAdjacentHTML(
-          "beforeend",
-          displayWeatherForecast(locationName, weatherData, index)
-        );
-      } else {
-        forecastDayDivEl.insertAdjacentHTML(
-          "beforeend",
-          displayWeatherForecast(locationName, weatherData, index)
-        );
-      }
-    });
-    })
-    .catch((error) => {
-      console.log("There has been an error!");
-    });
-}
-
-function displayWeatherForecast(locationName, weatherData, index) {
-  if (index === 0) {
-    return `<div id="weather">
-    <div class="weather-location" id="location-name"> ${locationName} (${weatherData.dt_txt.split(
-      " "
-    )[0]}) </div>
-    <div class="weather-icon">
-    <img src="https://openweathermap.org/img/wn/${
-      weatherData.weather[0].icon
-    }@2x.png" alt="weather icon">
-    </div>
-        <div class="weather-info">
-            <div class="temperature">
-                <span> Temperature: </span>
-                <span class="temp_value"> ${
-                  (weatherData.main.temp - 273.15).toFixed(2)
-                }°C </span>
-            </div>
-            <div class="wind">
-                <span> Wind: </span>
-                <span class="wind_value"> ${weatherData.wind.speed} MPH </span>
-            </div>
-            <div class="humidity">
-                <span> Humidity: </span>
-                <span class="humidity_value"> ${
-                  weatherData.main.humidity
-                } % </span>
-            </div>
-        </div>
-    </div>`;
-  } else {
-    return `<li class="forecast-value">
-    <h3>(${weatherData.dt_txt.split(" ")[0]})</h3>
-    <img src="https://openweathermap.org/img/wn/${
-      weatherData.weather[0].icon
-    }@2x.png" alt="weather icon">
-    <h4>Temp: ${(weatherData.main.temp - 273.15).toFixed(2)} °C</h4>
-    <h4>Wind: ${weatherData.wind.speed} MPH</h4>
-    <h4>Humidity: ${weatherData.main.humidity} %</h4>
-    </li>`;
-  }
-}
-
-loadSearchedLocations();
-
-searchEl.addEventListener("click", onClickSearch);
-
+clearSearchEl.addEventListener("click", clearSearchList)

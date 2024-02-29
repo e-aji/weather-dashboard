@@ -15,27 +15,22 @@
     </header>
 
     <main>
-
-        <!--- Left section --->
-
         <aside>
             <div class="search-section">
-                <input type="text" id="location" placeholder="Enter a Location">
+                <input type="text" id="location-name" placeholder="Enter a Location">
                 <button id="search"> Search </button>
                 <div id="error"></div>
             </div>
             <hr />
-            <div class="recent-section" id="recent-locations">
+            <div class="recent-section">
                 <h2> Recent Locations </h2>
-                <div> London </div>
-                <div> Barcelona </div>
-                <div> Paris </div>
-                <div> New York </div>
-                <div> Tokyo </div>
+            </div>
+                <div class="recent-locations-buttons" id="recent-locations"></div>
+
+            <button id="clear-search"> Clear Search </button>
+
             </div>
         </aside>
-
-        <!--- Dashboard --->
 
         <section>
             <div id="weather">
@@ -54,34 +49,54 @@
                         </div>
                         <div class="humidity">
                             <span> Humidity: </span>
-                            <span id="temp_value"> __% </span>
+                            <span id="humidity_value"> __% </span>
                         </div>
                     </div>
+
             </div>
-        </div>
 
-        <div id="forecast">
-            <h2> 5-Day Forecast </h2>
-            <div id="forecast-days">
-                <ul class="forecast-day">
-                    <li class="forecast-value">
-                        <h3> ( ______ ) </h3>
-                        <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="">
-                        <h4> Temp: __°C </h4>
-                        <h4> Wind: __ MPH</h4>
-                        <h4> Humidity: __%</h4>
-                    </li>  
-                    </ul>
+                    <div id="forecast">
+                        <h2> 5-Day Forecast </h2>
+                        <div id="forecast-days">
+                                <ul class="forecast-day">
+                                <li class="forecast-value">
+                                    <h3> ( ______ ) </h3>
+                                    <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="">
+                                    <h4> Temp: __°C </h4>
+                                    <h4> Wind: __ MPH</h4>
+                                    <h4> Humidity: __%</h4>
+                                </li>  
+                                </ul>
 
-                    <ul class="forecast-day">
-                        <li class="forecast-value">
-                            <h3> ( ______ ) </h3>
-                            <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="">
-                            <h4> Temp: __°C </h4>
-                            <h4> Wind: __ MPH</h4>
-                            <h4> Humidity: __%</h4>
-                        </li>  
-                        </ul>
+                                <ul class="forecast-day">
+                                    <li class="forecast-value">
+                                        <h3> ( ______ ) </h3>
+                                        <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="">
+                                        <h4> Temp: __°C </h4>
+                                        <h4> Wind: __ MPH</h4>
+                                        <h4> Humidity: __%</h4>
+                                    </li>  
+                                    </ul>
+
+                                <ul class="forecast-day">
+                                    <li class="forecast-value">
+                                        <h3> ( ______ ) </h3>
+                                        <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="">
+                                        <h4> Temp: __°C </h4>
+                                        <h4> Wind: __ MPH</h4>
+                                        <h4> Humidity: __%</h4>
+                                    </li>  
+                                    </ul>
+
+                            <ul class="forecast-day">
+                            <li class="forecast-value">
+                                <h3> ( ______ ) </h3>
+                                <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="">
+                                <h4> Temp: __°C </h4>
+                                <h4> Wind: __ MPH</h4>
+                                <h4> Humidity: __%</h4>
+                            </li>  
+                            </ul>
 
                         <ul class="forecast-day">
                             <li class="forecast-value">
@@ -92,29 +107,9 @@
                                 <h4> Humidity: __%</h4>
                             </li>  
                             </ul>
+                    </div>
 
-                    <ul class="forecast-day">
-                    <li class="forecast-value">
-                        <h3> ( ______ ) </h3>
-                        <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="">
-                        <h4> Temp: __°C </h4>
-                        <h4> Wind: __ MPH</h4>
-                        <h4> Humidity: __%</h4>
-                    </li>  
-                    </ul>
-
-                  <ul class="forecast-day">
-                    <li class="forecast-value">
-                        <h3> ( ______ ) </h3>
-                        <img src="https://openweathermap.org/img/wn/10d@2x.png" alt="">
-                        <h4> Temp: __°C </h4>
-                        <h4> Wind: __ MPH</h4>
-                        <h4> Humidity: __%</h4>
-                    </li>  
-                    </ul>
-            </div>
-
-        </div>
+                </div>
 
         </section>
 
@@ -128,7 +123,7 @@
     crossorigin="anonymous"
     ></script>
     
-  <script src="./assets/js/script.js"></script>
+  <script src="assets/js/script.js"></script>
 
 
 </body>
