@@ -50,3 +50,7 @@ Weather Dashboard - Populated
 ## Links 
 
 Link to deployed application - https://e-aji.github.io/week-6-weather-dashboard/
+
+## Assistance Received 
+
+Received some help from a Tutor to complete the displayWeather and getFiveDay functions in JavaScript
