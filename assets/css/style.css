@@ -149,7 +149,7 @@ section {
 
 .weather-info div {
   margin-bottom: 20px;
-  margin-left: 20px;
+  margin-left: 10px;
   }
 
 span {
@@ -173,28 +173,29 @@ span {
   margin-bottom: 20px;
   }
 
- 
 #forecast-card {
   
-  border: #1b263b;
-  border-style: solid;
-  border-radius: 8px;
-  background-color: #778da9;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-top: 20px;
   padding: 20px;
-  margin: 20px;
 
-}  
+}
 .forecast-value {
 
   font-size: 15px;
-  padding: 10px;
-  list-style: none;
-  margin-top: 10px;
+  padding: 15px;
+  background-color: #778da9;
+  border-radius: 5px;
+  text-align: left;
+  color: #1b263b;
+  height: 11.50em;
   }  
 
  .forecast-value h4 {
 
-      font-weight: 100;
+      font-weight: 200;
 
   }
 
@@ -218,10 +219,12 @@ span {
 
       display: block;
   }
-  
-    .forecast-value {
-      margin-top: 10px;
-    }
+
+  .forecast-value {
+
+    margin: 10px;
+  }
+
 }
 
 
@@ -263,7 +266,7 @@ padding: 15px;
 
 }
 
-#forecast h2 {
+#forecast h1 {
 
 text-align: center;
 margin-bottom: 10px;
@@ -281,5 +284,18 @@ font-size: 20px;
 margin: 7px;
 font-size: 15px;
 }
+
+}
+
+
+@media screen and (max-width: 850px) {
+
+
+.forecast-card {
+
+  flex: 1 1 100%;
+  margin-bottom: 10px;
+  }
+
 
 }
