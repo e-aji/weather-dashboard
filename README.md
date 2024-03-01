@@ -31,10 +31,10 @@ THEN I am again presented with current and future conditions for that city
 
 ## Usage 
 
-* The dashboard consists of a search bar, a main dashboard and a 5 day weather card section as well as a recent locations section
-* When the user inputs a location and clicks on the search button, the current weather and subsequent 5 day weather for that location is populated on the page 
-* The location is then saved to local storage and when the user refreshes the page, the location they have previously searched will be populated in the 'recent location' section 
-* There is also a 'clear search' button where the recent location section is cleared up when the 'clear search' button is selected 
+* The dashboard consists of a search bar, a main dashboard and a 5 day weather card section as well as a recent locations section.
+* When the user inputs a location and clicks on the search button, the current weather and subsequent 5 day weather for that location is populated on the page. 
+* The location is then saved to local storage and when the user refreshes the page, the location they have previously searched will be populated in the 'recent location' section and they can click on it again to get the weather for that location.
+* There is also a 'clear search' button where the recent location section is cleared up when the 'clear search' button is selected. 
 
 ## Images 
 
@@ -44,6 +44,9 @@ Weather Dashboard - Unpopulated
 
 Weather Dashboard - Populated 
 
+<img width="1440" alt="Weather Dashboard - Populated" src="https://github.com/e-aji/week-6-weather-dashboard/assets/156595423/f684d6df-2f21-4d33-bb39-6c8e6a89137f">
+
+
 ## Links 
 
-Link to deployed application - 
+Link to deployed application - https://e-aji.github.io/week-6-weather-dashboard/
