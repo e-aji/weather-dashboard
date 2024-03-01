@@ -44,8 +44,6 @@ Weather Dashboard - Unpopulated
 
 Weather Dashboard - Populated 
 
-
-
 ## Links 
 
 Link to deployed application - 

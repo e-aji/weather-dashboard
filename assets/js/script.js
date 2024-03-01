@@ -1,30 +1,29 @@
 const apiKey = "105998a52b86441612d8bdd2a88fbd96";
+const imgUrl = "http://openweathermap.org/img/wn/";
 
 var locationNameEl = document.querySelector("#location-name");
+var locationDisplayEl = document.querySelector("#location-display");
+
 var searchEl = document.querySelector("#search");
-var forecastDaysEl = document.querySelector("#forecast-days");
-var forecastDayEl = document.querySelector(".forecast-day"); 
 var weatherEl = document.querySelector("#weather"); 
 var clearSearchEl = document.querySelector("#clear-search");
-
 var recentLocationsDivEl = document.querySelector("#recent-locations"); 
+var forecastCardEl = document.querySelector('#forecast-card');
 
-const MAX_DAILY_FORECAST_DAYS = 5;
 
-function onClickSearch(event){
+document.getElementById("forecast").style.display = "none";
+
+function onClickSearch(){
   
-  event.preventDefault();
-
   var locationName = locationNameEl.value.trim();
   if (locationName) {
-
       getCurrentWeather (locationName);
   } else {
       alert ("Please enter a location");
   }
 
   saveLocation(locationName);
-  getCurrentWeather(locationName); 
+  displayWeather(locationName);
 };
 
 function saveLocation (locationName){
@@ -35,55 +34,93 @@ function saveLocation (locationName){
 
 };
 
-function getCurrentWeather (locationName, lat, lon){
+function getCurrentWeather (locationName){
+
+  const apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${locationName}&units=imperial&appid=${apiKey}`;
+
+      fetch(apiURL).then(function (response) {
+      response.json().then(function (data) {
+
+        displayWeather(data);
+        const lon = data.coord.lon;
+        const lat = data.coord.lat;
+
+        getFiveDay(lat, lon);
+
+      });
+    });
+};
+
+function displayWeather (data) {
   
-  const apiURL = `https://api.openweathermap.org/data/2.5/weather?q=${locationName}&lat=${lat}&lon=${lon}&appid=${apiKey}`;
+  var celsiusTemperature = (data.main.temp - 32) * 5/9;
+  var mphWindSpeed = data.wind.speed * 2.23694;
 
-  fetch(apiURL)
-  .then((response) => response.json()) .then((data) => {
-    if (data.cod !== 200)
-      return alert(`There are no coordinates for ${locationName}`);
-    const {main, wind} = data;
-    displayCurrentWeather({temp: main.temp, wind_speed: wind.speed, humidity: main.humidity});
+  const timeStamp = data.dt * 1000;
 
-  });
+  const todaysDate = new Date(timeStamp).toLocaleDateString();
+
+  document.getElementById("location-display").textContent = `${data.name} (${todaysDate})`;
+  document.getElementById("weather-icon").src = `${data.image}`;
+  document.getElementById("temp_value").textContent = `${celsiusTemperature.toFixed(2)} °C`;
+  document.getElementById("wind_value").textContent = `${mphWindSpeed.toFixed(2)} MPH`;
+  document.getElementById("humidity_value").textContent = `${data.main.humidity} %`;
 }
+ 
+function getFiveDay (lat, lon) {
 
-function displayCurrentWeather (weatherData) {
+  const apiURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=imperial&appid=${apiKey}`
 
-  const currentWeather = weatherData.current;
+    fetch(apiURL)
+    .then((response) => response.json())
+    .then((data) => {
 
-  weatherEl.textContent = "";
-
-  document.getElementById('temp_value').textContent = `${weatherData.temp} °C`;
-  document.getElementById('wind_value').textContent = `${weatherData.wind_speed} MPH`;
-  document.getElementById('humidity_value').textContent = `${weatherData.humidity} %`;
-
-}
-
-function display5DayForecast (weatherData) {
-
-  for (let i = 0; i < MAX_DAILY_FORECAST_DAYS; i++) {
-      const dailyForecast = dailyData[i];
-      console.log(dailyForecast);
-
-
-      const listItem = document.createElement('li');
-      listItem.classList.add('forecast-value');
-      listItem.innerHTML = `
-
-        <h3>${dailyForecast.day}</h3>
-        <img src="${dailyForecast.weatherIcon}" alt="Weather icon">
-        <h4>Temp: ${dailyForecast.temperature}°C</h4>
-        <h4>Wind: ${dailyForecast.wind} MPH</h4>
-        <h4>Humidity: ${dailyForecast.humidity}%</h4>
-
-      `
-      forecastDayEl.appendChild(listItem);
+        document.getElementById("forecast").style.display = "block";
       
-  }
-}
+        const fiveDayArray = data.list.filter(day => day.dt_txt.includes("12:00:00")); 
+      
+        let forecastCards = "" ;
+      
+          for (var i = 0; i < fiveDayArray.length; i++) {
+      
+            const timeStamp = fiveDayArray[i].dt * 1000;
+            var weatherDetails = {
+              date: new Date(timeStamp).toLocaleDateString(),
+              temperature: data.list[i].main.temp,
+              wind: data.list[i].wind.speed,
+              humidity: data.list[i].main.humidity,
+              image: imgUrl + data.list[i].weather[0].icon + ".png",
+            };
+      
+            forecastCards += `
+              <div class="forecast-value">
+                <h3>${weatherDetails.date}</h3>
+                <img src="${weatherDetails.image}" alt="Weather Icon">
+                <h4>Temp: ${weatherDetails.temperature}°C</h4>
+                <h4>Wind: ${weatherDetails.wind} MPH</h4>
+                <h4>Humidity: ${weatherDetails.humidity}%</h4>
+              </div>
+            `;
+      
+            forecastCardEl.innerHTML = forecastCards;
+          }; 
+    });
+        
+};
 
+function showWeather() {
+
+  document.getElementById("weather").style.display = "block";
+  document.getElementById("forecast").style.display = "block";
+
+  var locationName = e.target.textContent;
+
+  if (locationName) {
+    displayWeather(data);
+    displayFiveDay(data);
+  }
+
+};
 function loadSearchedLocations() {
   const recentLocations = JSON.parse(localStorage.getItem("location-name")) || [];
   const recentLocationsDivEl = document.querySelector("#recent-locations");
